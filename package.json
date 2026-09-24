@@ -1,0 +1,41 @@
+{
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "express": "^5.2.1",
+    "pg": "^8.23.0",
+    "router": "^2.2.0",
+    "typescript": "^7.0.2"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.1",
+    "@types/pg": "^8.23.1",
+    "tsx": "^4.23.13"
+  },
+  "name": "albus",
+  "version": "1.0.0",
+  "description": "Albus is a comprehensive portfolio management tool aimed at making information more accessible and contextualized.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx watch --env-file=.env server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jyuan3058/Albus.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Jyuan3058/Albus/issues"
+  },
+  "homepage": "https://github.com/Jyuan3058/Albus#readme",
+  "allowScripts": {
+    "bcrypt@6.0.0": true,
+    "esbuild@0.28.2": true,
+    "fsevents@2.3.3": true
+  }
+}
