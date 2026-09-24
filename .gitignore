@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Environment variables — never commit secrets
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Build output (if you add TypeScript/bundling later)
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+
+# Test coverage output
+coverage/
+
+# Postgres data (only relevant if you're running Postgres via a local Docker volume folder in-repo)
+pgdata/
