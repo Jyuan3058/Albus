@@ -6,7 +6,7 @@ import pool from '../../db/connection.ts'
 
 const router = Router();
 
-router.post('/api/auth/login', async (req:Request,res:Response) =>{
+router.post('/login', async (req:Request,res:Response) =>{
     const{email,password} = req.body;
     try
     {

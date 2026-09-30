@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import express from 'express';
 
 const router = Router();
-router.post('/api/auth/signup', async (req:Request,res:Response)=> {
+router.post('/signup', async (req:Request,res:Response)=> {
     const {email,password,firstName,lastName,userTier} = req.body;
     const hashedPassword = await bcrypt.hash(password,10);
     try
