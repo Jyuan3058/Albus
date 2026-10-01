@@ -2,21 +2,35 @@
 import {parse} from 'csv-parse';
 import fs from 'fs';
 import getActiveDate from './getDate.ts';
+import {getStockID, insertStock, insertStockPrice,getStockPriceByDate} from '../../db/stocks.ts'
+
 // for alpha vantage return
-function processStock(stockData:any[]){
-    const date = getActiveDate();
-    console.log(date)    
-    
-    console.log(stockData);
-    
-    console.log(stockData[0]["Meta Data"]["2. Symbol"]);
+async function processStock(stockData:any[]){
+    // previous date due to not having current day api access
+    const lastCompleteDay = getActiveDate();
+    console.log(lastCompleteDay)    
+
     for (let i = 0; i < stockData.length; i++){
-        console.log(stockData[i]["Meta Data"]["2. Symbol"]);
-        console.log(stockData[i]["Time Series (Daily)"][date]);
-        // i now have the price data for intra day for each ticker that is sent through the body
-        // now i need to update the db
+
+        const symbol = stockData[i]["Meta Data"]["2. Symbol"];
+        let stockID = await getStockID(symbol);
+        if (!stockID){stockID = await insertStock(symbol);}
+
+        const priceForDate = await getStockPriceByDate(stockID,new Date(lastCompleteDay));
+        if (!priceForDate){
+            const dataByDate = stockData[i]["Time Series (Daily)"][lastCompleteDay];
+            const open = dataByDate["1. open"];
+            const close = dataByDate["4. close"];
+            const high = dataByDate["2. high"];
+            const low = dataByDate["3. low"];
+            const volume = dataByDate["5. volume"];
+            insertStockPrice(stockID,new Date(lastCompleteDay),Number(open),Number(close),Number(high),Number(low),Number(volume));
+        };
     }
+
+    // future plans for backfilling historical data
 }
 
+async function processPositions()
 export default processStock;
 

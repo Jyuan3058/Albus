@@ -9,7 +9,9 @@ router.post('/signup', async (req:Request,res:Response)=> {
     const hashedPassword = await bcrypt.hash(password,10);
     try
     {
-        const result = await pool.query('INSERT into users (email,firstname,lastname,passhash) VALUES ($1,$2,$3,$4) RETURNING userid,firstName,lastName,email,passHash',[email,firstName,lastName,hashedPassword]);
+        // RETURNING userid,firstName,lastName,email,passHash
+        const query = 'WITH inserted_user AS (INSERT into users (email,firstname,lastname,passhash) VALUES ($1,$2,$3,$4) RETURNING userid,firstname,lastname,email,passhash), inserted_portfolio AS (INSERT INTO userportfolio(userid) SELECT userid from inserted_user) SELECT userid,firstname,lastname,email,passhash FROM inserted_user;';
+        const result = await pool.query(query,[email,firstName,lastName,hashedPassword]);
         res.status(201).json(result.rows[0]);
     }
     catch(err:any){
