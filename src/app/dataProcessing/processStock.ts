@@ -3,12 +3,14 @@ import {parse} from 'csv-parse';
 import fs from 'fs';
 import getActiveDate from './getDate.ts';
 import {getStockID, insertStock, insertStockPrice,getStockPriceByDate} from '../../db/stocks.ts'
+import { insertPosition } from '../../db/positions.ts';
+import { getPortfolioID } from '../../db/portfolio.ts';
 
 // for alpha vantage return
 async function processStock(stockData:any[]){
     // previous date due to not having current day api access
     const lastCompleteDay = getActiveDate();
-    console.log(lastCompleteDay)    
+    // console.log(lastCompleteDay)    
 
     for (let i = 0; i < stockData.length; i++){
 
@@ -31,6 +33,18 @@ async function processStock(stockData:any[]){
     // future plans for backfilling historical data
 }
 
-async function processPositions()
-export default processStock;
+async function addPositions(symbols:any[],userID:number){
+    console.log(userID);
+    const portfolioID = await getPortfolioID(userID);
+    console.log(portfolioID);
+    for (let symbol of symbols){
+        let stockID = await getStockID(symbol);
+        if (!stockID){stockID = await insertStock(symbol);}
+        await insertPosition(portfolioID,stockID);
+    }
+    // add positions to the positions table
+    // columns: positionid, portfolioid, stockid
+}
+
+export {processStock, addPositions};
 
