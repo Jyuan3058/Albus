@@ -3,7 +3,7 @@ import {parse} from 'csv-parse';
 import fs from 'fs';
 import getActiveDate from './getDate.ts';
 import {getStockID, insertStock, insertStockPrice,getStockPriceByDate} from '../../db/stocks.ts'
-import { insertPosition } from '../../db/positions.ts';
+import { insertPosition,deletePosition } from '../../db/positions.ts';
 import { getPortfolioID } from '../../db/portfolio.ts';
 
 // for alpha vantage return
@@ -34,9 +34,7 @@ async function processStock(stockData:any[]){
 }
 
 async function addPositions(symbols:any[],userID:number){
-    console.log(userID);
     const portfolioID = await getPortfolioID(userID);
-    console.log(portfolioID);
     for (let symbol of symbols){
         let stockID = await getStockID(symbol);
         if (!stockID){stockID = await insertStock(symbol);}
@@ -44,6 +42,15 @@ async function addPositions(symbols:any[],userID:number){
     }
     // add positions to the positions table
     // columns: positionid, portfolioid, stockid
+}
+
+async function deletePositions(symbols:any[],userID:number){
+    const portfolioID = await getPortfolioID(userID);
+    for (let symbol of symbols){
+        let stockID = await getStockID(symbol);
+        if (!stockID){stockID = await insertStock(symbol);}
+        await deletePosition(portfolioID,stockID);
+    }
 }
 
 export {processStock, addPositions};
